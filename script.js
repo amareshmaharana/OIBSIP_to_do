@@ -2,33 +2,41 @@ const listContainer = document.getElementById("list-container")
 
 const inputBox = document.getElementById("input-box")
 
-const addButton = document.querySelector("button")
-
-addButton.addEventListener("click", function() {
+const addTask = () => {
     const taskText = inputBox.value
     if (taskText !== "") {
         const li = document.createElement("li")
         li.textContent = taskText
         listContainer.appendChild(li)
         inputBox.value = ""
+
+        const span = document.createElement("span")
+        span.innerHTML = "\u00d7"
+        li.appendChild(span)
+        span.addEventListener("click", function() {
+            li.remove()
+            saveTask()
+        })
+    } else {
+        alert("Please write a task")
     }
-})
+}
 
-const listItems = document.querySelectorAll("li")
+const toggleTask = (event) => {
+    if (event.target.tagName === "LI") {
+        event.target.classList.toggle("checked")
+        saveTask()
+    }
+}
 
-listItems.forEach(function(item) {
-    item.addEventListener("click", function() {
-        this.classList.toggle("checked")
-    })
-})
+listContainer.addEventListener("click", toggleTask)
 
-// const deleteButton = document.createElement("button")
-// deleteButton.textContent = "Delete"
-// listContainer.appendChild(deleteButton)
+const saveTask = () => {
+    localStorage.setItem("tasks", listContainer.innerHTML)
+}
 
-// deleteButton.addEventListener("click", function() {
-//     const checkedItems = document.querySelectorAll("li.checked")
-//     checkedItems.forEach(function(item) {
-//         listContainer.removeChild(item)
-//     })
-// })
+const showTask = () => {
+    listContainer.innerHTML = localStorage.getItem("tasks")
+}
+
+showTask()
