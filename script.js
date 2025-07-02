@@ -37,6 +37,14 @@ const saveTask = () => {
 
 const showTask = () => {
     listContainer.innerHTML = localStorage.getItem("tasks")
+    // Reattach event listeners to spans after loading from localStorage
+    const spans = listContainer.getElementsByTagName("span")
+    for (let span of spans) {
+        span.addEventListener("click", function() {
+            span.parentElement.remove()
+            saveTask()
+        })
+    }
 }
 
 showTask()
